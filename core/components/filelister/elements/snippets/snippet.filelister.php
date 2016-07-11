@@ -168,12 +168,20 @@ foreach (new DirectoryIterator($curPath) as $file) {
 
     /* if allowing for downloading, generate a link here */
     if ($file->isDir() || $canDownload) {
-        $fileArray['link'] = $fileLister->getChunk($fileLinkTpl,array(
-            'url' => $modx->makeUrl($modx->resource->get('id'),'',array(
-                $navKey => $key,
-            )),
-            'filename' => $fileArray['filename'],
-        ));
+		if($file->isDir()){
+			$url = $modx->makeUrl($modx->resource->get('id'),'',array(
+				'dp' => $filePath,
+				$navKey => $key
+			));
+		} else {
+			$url = $modx->makeUrl($modx->resource->get('id'),'',array(
+				$navKey => $key
+			));
+		}
+		$fileArray['link'] = $fileLister->getChunk($fileLinkTpl,array(
+			'url' => $url,
+			'filename' => $fileArray['filename'],
+		));
     } else {
         $fileArray['link'] = $fileArray['filename'];
     }
